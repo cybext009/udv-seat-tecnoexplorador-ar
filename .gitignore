@@ -1,0 +1,28 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.sln
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+.DS_Store
+# Secretos y descargas
+vuforia-license.txt
+descargas/
+# Paquete Vuforia (132 MB, excede el límite de GitHub): se repone desde developer.vuforia.com
+Packages/com.ptc.vuforia.engine-*.tgz
+# Contiene la license key de Vuforia: se regenera al abrir el proyecto y se pega la llave
+Assets/Resources/VuforiaConfiguration.asset
+Assets/Resources/VuforiaConfiguration.asset.meta
