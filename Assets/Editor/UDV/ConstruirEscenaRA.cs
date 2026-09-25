@@ -51,7 +51,7 @@ namespace UDV
             Debug.Log("[UDV] Escena RA construida y guardada: " + RutaEscena);
         }
 
-        static GameObject ObtenerTarget(string nombre, Vector3 posicion)
+        internal static GameObject ObtenerTarget(string nombre, Vector3 posicion)
         {
             var existente = Object.FindObjectsByType<ImageTargetBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .FirstOrDefault(t => t.gameObject.name == nombre);
@@ -90,7 +90,7 @@ namespace UDV
             return go;
         }
 
-        static GameObject ObtenerHijoPrimitivo(GameObject padre, string nombre, PrimitiveType tipo)
+        internal static GameObject ObtenerHijoPrimitivo(GameObject padre, string nombre, PrimitiveType tipo)
         {
             var t = padre.transform.Find(nombre);
             GameObject go = t != null ? t.gameObject : GameObject.CreatePrimitive(tipo);
@@ -174,7 +174,7 @@ namespace UDV
         }
 
         // Deja exactamente un listener persistente (Runtime Only) apuntando al método indicado.
-        static void Reemplazar(UnityEvent evento, Object objetivo, UnityAction accion)
+        internal static void Reemplazar(UnityEvent evento, Object objetivo, UnityAction accion)
         {
             for (int i = evento.GetPersistentEventCount() - 1; i >= 0; i--)
                 UnityEventTools.RemovePersistentListener(evento, i);
