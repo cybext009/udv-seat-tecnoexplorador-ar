@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
+    <ImageTarget name="wifi" size="1.000000 0.666667" />
+    <ImageTarget name="raton" size="1.000000 0.666667" />
+    <ImageTarget name="teclado" size="1.000000 0.666667" />
+    <ImageTarget name="computadora" size="1.000000 0.666667" />
     <ImageTarget name="switch" size="1.000000 0.666667" />
     <ImageTarget name="servidor" size="1.000000 0.666667" />
   </Tracking>
