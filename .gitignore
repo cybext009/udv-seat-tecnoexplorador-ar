@@ -26,3 +26,5 @@ Packages/com.ptc.vuforia.engine-*.tgz
 # Contiene la license key de Vuforia: se regenera al abrir el proyecto y se pega la llave
 Assets/Resources/VuforiaConfiguration.asset
 Assets/Resources/VuforiaConfiguration.asset.meta
+# Datos temporales de Vuforia en el editor
+QCAR/

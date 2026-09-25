@@ -45,6 +45,13 @@ namespace UDV
             var teclado = ConstruirEscenaRA.ObtenerTarget("teclado", new Vector3(2, 0, 0));
             var raton = ConstruirEscenaRA.ObtenerTarget("raton", new Vector3(0, 0, -2));
             var wifi = ConstruirEscenaRA.ObtenerTarget("wifi", new Vector3(2, 0, -2));
+            // Los targets deben estar en la raíz de la escena (una corrida anterior los dejó anidados).
+            foreach (var t in new[] { computadora, teclado, raton, wifi })
+                t.transform.SetParent(null, true);
+            computadora.transform.position = new Vector3(0, 0, 0);
+            teclado.transform.position = new Vector3(2, 0, 0);
+            raton.transform.position = new Vector3(0, 0, -2);
+            wifi.transform.position = new Vector3(2, 0, -2);
 
             var figComputadora = ConstruirEscenaRA.ObtenerHijoPrimitivo(computadora, "Figura", PrimitiveType.Cube);
             var figTeclado = ConstruirEscenaRA.ObtenerHijoPrimitivo(teclado, "Figura", PrimitiveType.Cube);
@@ -131,7 +138,7 @@ namespace UDV
             tmp.fontSize = fuente;
             tmp.alignment = alineacion;
             tmp.color = Color.white;
-            tmp.enableWordWrapping = true;
+            tmp.textWrappingMode = TextWrappingModes.Normal;
             tmp.text = "";
             if (tmp.font == null && TMP_Settings.defaultFontAsset != null)
             {

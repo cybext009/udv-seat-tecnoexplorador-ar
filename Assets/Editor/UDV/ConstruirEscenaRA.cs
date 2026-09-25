@@ -62,8 +62,11 @@ namespace UDV
             }
             else
             {
+                // El menú crea el objeto como hijo de la selección actual: se limpia antes y se desanida después.
+                Selection.activeGameObject = null;
                 EditorApplication.ExecuteMenuItem("GameObject/Vuforia Engine/Image Target");
                 go = Selection.activeGameObject;
+                go.transform.SetParent(null, true);
                 go.name = nombre;
                 var so = new SerializedObject(go.GetComponent<ImageTargetBehaviour>());
                 so.FindProperty("mImageTargetType").intValue = 0;      // From Database
