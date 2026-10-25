@@ -28,3 +28,12 @@ Assets/Resources/VuforiaConfiguration.asset
 Assets/Resources/VuforiaConfiguration.asset.meta
 # Datos temporales de Vuforia en el editor
 QCAR/
+
+# Assets de la Unity Asset Store: la licencia (Standard EULA) no permite redistribuirlos.
+# Se importan desde Window > Package Management > My Assets (ver README).
+/Assets/JustPlay/
+/Assets/JustPlay.meta
+/Assets/Casual Game Sounds U6/
+/Assets/Casual Game Sounds U6.meta
+/Assets/FREE CASUAL MUSIC PACK/
+/Assets/FREE CASUAL MUSIC PACK.meta

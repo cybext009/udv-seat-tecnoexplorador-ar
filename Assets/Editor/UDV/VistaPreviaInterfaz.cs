@@ -74,6 +74,34 @@ namespace UDV
             Debug.Log("[UDV] Vista previa de la interfaz en " + Path.GetFullPath(salida));
         }
 
+        // Renderiza cada modelo 3D sobre su tarjeta, visto como lo vería la cámara del jugador (arriba y al frente).
+        [MenuItem("UDV/Capturas/Vista previa de los modelos")]
+        public static void GenerarModelos()
+        {
+            string salida = Argumento("-salida") ?? "VistaPrevia";
+            Directory.CreateDirectory(salida);
+            EditorSceneManager.OpenScene("Assets/Scenes/SampleScene.unity", OpenSceneMode.Single);
+            GameObject.Find("Canvas").SetActive(false);
+
+            var camGo = new GameObject("CamaraVistaPrevia");
+            var cam = camGo.AddComponent<Camera>();
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.36f, 0.40f, 0.45f);
+            cam.fieldOfView = 40f;
+            var rt = new RenderTexture(900, 700, 24);
+            cam.targetTexture = rt;
+
+            foreach (var clave in new[] { "computadora", "teclado", "raton", "wifi" })
+            {
+                var target = GameObject.Find(clave).transform;
+                camGo.transform.position = target.position + new Vector3(0f, 1.3f, -1.5f);
+                camGo.transform.LookAt(target.position + Vector3.up * 0.2f);
+                Render(cam, rt, Path.Combine(salida, "modelo-" + clave + ".png"));
+            }
+            UnityEngine.Object.DestroyImmediate(camGo);
+            Debug.Log("[UDV] Vista previa de los modelos en " + Path.GetFullPath(salida));
+        }
+
         static void Mostrar(GameObject menu, GameObject juego, GameObject victoria, bool m, bool j, bool v)
         {
             menu.SetActive(m);

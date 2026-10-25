@@ -31,31 +31,33 @@ namespace UDV
         // Lado mayor del modelo respecto al ancho de la tarjeta.
         const float FraccionModelo = 0.7f;
 
-        // Modelo 3D de la Asset Store por marcador: ruta del prefab o del modelo importado.
-        // Ruta vacía o inexistente = se usa una primitiva de respaldo (como en el parcial 1).
+        // Modelo 3D de la Asset Store por marcador: nombre del prefab del paquete "Computer devices" (Maximalist).
+        // Se busca por nombre porque la carpeta del paquete lleva una "С" cirílica ("Сomputer devices").
+        // Nombre vacío o prefab inexistente = se usa una primitiva de respaldo (como en el parcial 1).
+        const string CarpetaModelos = "Assets/JustPlay";
         static readonly Dictionary<string, string> Modelos = new Dictionary<string, string>
         {
-            { "computadora", "" },
-            { "teclado", "" },
-            { "raton", "" },
-            { "wifi", "" },
+            { "computadora", "Monitor" },
+            { "teclado", "Keyboard" },
+            { "raton", "Mouse" },
+            { "wifi", "Router" },
         };
 
-        // Rotación local de cada modelo para que mire hacia el jugador (se ajusta al ver los assets).
+        // Rotación local de cada modelo para que mire hacia el jugador (ajustada con la vista previa de los modelos).
         static readonly Dictionary<string, Vector3> Rotaciones = new Dictionary<string, Vector3>
         {
-            { "computadora", Vector3.zero },
+            { "computadora", new Vector3(0f, 180f, 0f) },   // el FBX viene mirando hacia atrás
             { "teclado", Vector3.zero },
             { "raton", Vector3.zero },
-            { "wifi", Vector3.zero },
+            { "wifi", new Vector3(0f, 180f, 0f) },          // igual: sin girar se ven los puertos
         };
 
-        // Audio (Asset Store). Ruta vacía = sin ese sonido; el juego funciona igual.
-        const string RutaMusica = "";
-        const string RutaInicio = "";
-        const string RutaCorrecto = "";
-        const string RutaIncorrecto = "";
-        const string RutaVictoria = "";
+        // Audio (Asset Store: "Free Casual Music Pack" y "FREE Casual Game SFX Pack"). Ruta vacía = sin ese sonido.
+        const string RutaMusica = "Assets/FREE CASUAL MUSIC PACK/CASUAL THEME 2/CASUAL THEME 2 - LOOP 1.wav";
+        const string RutaInicio = "Assets/FREE CASUAL MUSIC PACK/BONUS 2 - SFX/POWERUP 1.wav";
+        const string RutaCorrecto = "Assets/FREE CASUAL MUSIC PACK/BONUS 2 - SFX/SPECIAL COLECT 1.wav";
+        const string RutaIncorrecto = "Assets/Casual Game Sounds U6/CasualGameSounds/DM-CGS-10.wav";
+        const string RutaVictoria = "Assets/FREE CASUAL MUSIC PACK/BONUS 2 - SFX/FIREWORKS 3.wav";
 
         // Paleta: azul y dorado UDV, verde y rojo para la retroalimentación.
         static readonly Color Azul = new Color32(0x00, 0x19, 0x46, 0xFF);
@@ -136,8 +138,7 @@ namespace UDV
 
         static GameObject InstanciarMalla(string clave)
         {
-            var ruta = Modelos[clave];
-            var asset = string.IsNullOrEmpty(ruta) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(ruta);
+            var asset = BuscarPrefab(Modelos[clave]);
             if (asset != null)
                 return (GameObject)PrefabUtility.InstantiatePrefab(asset);
 
@@ -155,6 +156,18 @@ namespace UDV
                     return Envolver(w);
                 default: return GameObject.CreatePrimitive(PrimitiveType.Cube);
             }
+        }
+
+        static GameObject BuscarPrefab(string nombre)
+        {
+            if (string.IsNullOrEmpty(nombre) || !AssetDatabase.IsValidFolder(CarpetaModelos)) return null;
+            foreach (var guid in AssetDatabase.FindAssets(nombre + " t:Prefab", new[] { CarpetaModelos }))
+            {
+                var ruta = AssetDatabase.GUIDToAssetPath(guid);
+                if (System.IO.Path.GetFileNameWithoutExtension(ruta) == nombre)
+                    return AssetDatabase.LoadAssetAtPath<GameObject>(ruta);
+            }
+            return null;
         }
 
         // Mete la primitiva en un objeto vacío para que su escala propia no se pierda al ajustar.
