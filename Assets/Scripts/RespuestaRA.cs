@@ -3,26 +3,32 @@ using UnityEngine;
 /// <summary>
 /// Va en cada image target. Se conecta a los eventos del Default Observer Event Handler:
 /// On Target Found -> AlEncontrar, On Target Lost -> AlPerder (Runtime Only).
-/// Consulta al GestorPreguntas y colorea la figura primitiva hija según el resultado.
+/// Consulta al GestorPreguntas y anima el modelo 3D según el resultado.
 /// </summary>
 public class RespuestaRA : MonoBehaviour
 {
     [SerializeField] private GestorPreguntas gestor;
-    [SerializeField] private Renderer figura;
-
-    private static readonly Color ColorReposo = Color.white;
-    private static readonly Color ColorCorrecto = new Color(0.2f, 0.8f, 0.3f);
-    private static readonly Color ColorIncorrecto = new Color(0.9f, 0.2f, 0.2f);
+    [SerializeField] private AnimacionModelo animacion;
 
     private Tarjeta tarjeta;
 
     void Awake()
     {
         tarjeta = GetComponent<Tarjeta>();
-        if (figura == null)
+        if (animacion == null)
         {
-            figura = GetComponentInChildren<Renderer>();
+            animacion = GetComponentInChildren<AnimacionModelo>(true);
         }
+    }
+
+    void OnEnable()
+    {
+        gestor.AlGanar += Celebrar;
+    }
+
+    void OnDisable()
+    {
+        gestor.AlGanar -= Celebrar;
     }
 
     public void AlEncontrar()
@@ -30,31 +36,30 @@ public class RespuestaRA : MonoBehaviour
         Debug.Log("[RA] Marcador enfocado: " + tarjeta.GetNombre());
         GestorPreguntas.Resultado resultado = gestor.Verificar(tarjeta);
 
-        switch (resultado)
+        if (animacion == null)
         {
-            case GestorPreguntas.Resultado.Correcto:
-                Pintar(ColorCorrecto);
-                break;
-            case GestorPreguntas.Resultado.Incorrecto:
-                Pintar(ColorIncorrecto);
-                break;
-            default:
-                Pintar(ColorReposo);
-                break;
+            return;
+        }
+        if (resultado == GestorPreguntas.Resultado.Correcto)
+        {
+            animacion.Saltar();
+        }
+        else if (resultado == GestorPreguntas.Resultado.Incorrecto)
+        {
+            animacion.Sacudir();
         }
     }
 
     public void AlPerder()
     {
-        Pintar(ColorReposo);
-        gestor.LimpiarMensaje();
+        gestor.MarcadorPerdido(tarjeta);
     }
 
-    private void Pintar(Color color)
+    private void Celebrar(int intentos)
     {
-        if (figura != null)
+        if (animacion != null)
         {
-            figura.material.color = color;
+            animacion.Celebrar();
         }
     }
 }
