@@ -199,6 +199,11 @@ namespace UDV
 
         static AnimatorController CrearAnimacionFlotar()
         {
+            // Si ya existen se reutilizan: recrearlos cambia sus ids internos y ensucia el historial de git.
+            var existente = AssetDatabase.LoadAssetAtPath<AnimatorController>(RutaControlador);
+            if (existente != null && AssetDatabase.LoadAssetAtPath<AnimationClip>(RutaClipFlotar) != null)
+                return existente;
+
             System.IO.Directory.CreateDirectory("Assets/Animaciones");
             var clip = new AnimationClip { name = "Flotar" };
             // 8 s de clip: sube y baja 4 veces (cada 2 s) y da una vuelta completa.
